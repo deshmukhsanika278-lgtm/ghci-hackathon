@@ -4,116 +4,166 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI for Social Impact</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
   body {
+    margin: 0;
+    padding: 0;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(to bottom right, #a8e6cf, #dcedf9);
-    color: #034c3c;
-    text-align: center;
-    padding: 30px;
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
   }
 
-  h1, h2 { color: #045d56; font-size: 28px; }
-  h3 { font-size: 22px; }
+  .container {
+    width: 90%;
+    max-width: 600px;
+    backdrop-filter: blur(18px);
+    background: rgba(255, 255, 255, 0.25);
+    padding: 35px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    animation: fadeIn 0.6s ease-in-out;
+  }
 
-  .page { display: none; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h1, h2 {
+    color: #034c3c;
+    font-weight: 600;
+  }
+
+  h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
 
   button {
-    background-color: #6ec6ca;
-    border: none;
+    width: 85%;
+    background: linear-gradient(135deg, #6ec6ca, #4bb5b9);
     color: white;
-    padding: 16px 30px;
-    margin: 12px;
-    border-radius: 12px;
+    padding: 14px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 14px;
     font-size: 18px;
     cursor: pointer;
+    font-weight: 500;
+    transition: 0.25s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.12);
   }
-  button:hover { background-color: #57b2b6; }
+
+  button:hover {
+    transform: scale(1.04);
+    background: linear-gradient(135deg, #4bb5b9, #6ec6ca);
+  }
 
   textarea {
-    width: 90%;
-    height: 200px;
+    width: 100%;
+    height: 160px;
     padding: 15px;
-    border-radius: 12px;
+    border-radius: 14px;
     border: 2px solid #6ec6ca;
-    font-size: 18px;
+    font-size: 16px;
     resize: none;
+    background-color: rgba(255,255,255,0.7);
   }
 
   input[type="file"] {
-    margin-top: 20px;
-    font-size: 18px;
+    font-size: 17px;
+    margin-top: 10px;
+    color: #034c3c;
   }
 
   .back-btn {
-    background-color: #7cd992;
+    background: linear-gradient(135deg, #77dd77, #55c855);
   }
+
   .back-btn:hover {
-    background-color: #62c47b;
+    background: linear-gradient(135deg, #55c855, #77dd77);
+  }
+
+  .page {
+    display: none;
   }
 
   #output {
-    font-size: 20px;
     margin-top: 20px;
+    font-size: 18px;
+    color: #034c3c;
+    font-weight: 500;
   }
+
 </style>
 </head>
+
 <body>
 
-<!-- PAGE 1: Language Selection -->
-<div id="page1" class="page" style="display:block;">
-  <h1>🌍 AI for Social Impact</h1>
-  <h2>Select Your Language / अपनी भाषा चुनें / మీ భాషను ఎంచుకోండి</h2>
-  <button onclick="setLanguage('english')">English</button>
-  <button onclick="setLanguage('hindi')">हिन्दी</button>
-  <button onclick="setLanguage('telugu')">తెలుగు</button>
-  <br><br>
-  <button onclick="speakText('Please select your language')">🔊 Voice Assist</button>
-</div>
+<div class="container">
 
-<!-- PAGE 2: Topic Selection -->
-<div id="page2" class="page">
-  <h2 id="topicTitle"></h2>
-  <h3>Select an area:</h3>
-  <button onclick="showTopic('Education')">Education</button>
-  <button onclick="showTopic('Climate')">Climate</button>
-  <button onclick="showTopic('Safety')">Safety</button>
-  <button onclick="showTopic('Accessibility')">Accessibility</button>
-  <button onclick="showTopic('Health')">Health</button>
-  <br><br>
-  <button onclick="speakText('Select a topic like Education or Health')">🔊 Voice Assist</button>
-  <br><br>
-  <button class="back-btn" onclick="goBack(1)">⬅ Back</button>
-</div>
+  <!-- PAGE 1 -->
+  <div id="page1" class="page" style="display:block;">
+    <h1>🌍 AI for Social Impact</h1>
+    <h2>Select Your Language</h2>
+    <button onclick="setLanguage('english')">English</button>
+    <button onclick="setLanguage('hindi')">हिन्दी</button>
+    <button onclick="setLanguage('telugu')">తెలుగు</button>
+    <button onclick="speakText('Please select your language')">🔊 Voice Assist</button>
+  </div>
 
-<!-- PAGE 3: Query + Voice + Image -->
-<div id="page3" class="page">
-  <h2 id="selectedTopic"></h2>
-  <p style="font-size:20px;">Enter or speak your query:</p>
-  <textarea id="queryBox" placeholder="Type your question here..."></textarea><br>
-  <button onclick="startVoiceInput()">🎤 Speak Query</button>
-  <button onclick="processQuery()">Submit</button>
-  <br><br>
-  <input type="file" accept="image/*" id="imageInput">
-  <p><i style="font-size:18px;">Upload a photo for analysis</i></p>
-  <br>
-  <button onclick="speakText('You can type or say your question, and even upload a photo')">🔊 Voice Assist</button>
-  <br><br>
-  <button class="back-btn" onclick="goBack(2)">⬅ Back</button>
-  <div id="output"></div>
+  <!-- PAGE 2 -->
+  <div id="page2" class="page">
+    <h2 id="topicTitle"></h2>
+    <button onclick="showTopic('Education')">📘 Education</button>
+    <button onclick="showTopic('Climate')">🌱 Climate</button>
+    <button onclick="showTopic('Safety')">🛡️ Safety</button>
+    <button onclick="showTopic('Accessibility')">♿ Accessibility</button>
+    <button onclick="showTopic('Health')">❤️ Health</button>
+    <button onclick="speakText('Select a topic like Education or Health')">🔊 Voice Assist</button>
+    <button class="back-btn" onclick="goBack(1)">⬅ Back</button>
+  </div>
+
+  <!-- PAGE 3 -->
+  <div id="page3" class="page">
+    <h2 id="selectedTopic"></h2>
+    <textarea id="queryBox" placeholder="Type your question here..."></textarea>
+    <button onclick="startVoiceInput()">🎤 Speak</button>
+    <button onclick="processQuery()">Submit</button>
+    <input type="file" accept="image/*" id="imageInput">
+    <p><i>Upload an image for analysis</i></p>
+    <button onclick="speakText('You can type or speak your query and upload a photo')">🔊 Voice Assist</button>
+    <button class="back-btn" onclick="goBack(2)">⬅ Back</button>
+    <div id="output"></div>
+  </div>
+
 </div>
 
 <script>
+
 let language = 'english';
 let topic = '';
 
 function setLanguage(lang) {
   language = lang;
-  document.getElementById('page1').style.display = 'none';
-  document.getElementById('page2').style.display = 'block';
+  showPage(2);
 
   const titles = {
-    english: "Choose your area of interest",
+    english: "Choose an Area of Interest",
     hindi: "अपना क्षेत्र चुनें",
     telugu: "మీ అంశాన్ని ఎంచుకోండి"
   };
@@ -123,8 +173,8 @@ function setLanguage(lang) {
 
 function showTopic(selected) {
   topic = selected;
-  document.getElementById('page2').style.display = 'none';
-  document.getElementById('page3').style.display = 'block';
+  showPage(3);
+
   document.getElementById('selectedTopic').innerText = "You chose: " + selected;
   speakText("You chose " + selected + ". Now please enter or speak your question.");
 }
@@ -132,9 +182,10 @@ function showTopic(selected) {
 function processQuery() {
   const text = document.getElementById('queryBox').value;
   if (text.trim() === "") {
-    speakText("Please enter or speak your query first.");
+    speakText("Please enter your question first.");
     return;
   }
+
   document.getElementById('output').innerHTML = `<p><b>Your Query:</b> ${text}</p>`;
   speakText("You asked: " + text);
 }
@@ -142,16 +193,17 @@ function processQuery() {
 function speakText(text) {
   const synth = window.speechSynthesis;
   const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = (language === 'hindi') ? 'hi-IN' :
-                (language === 'telugu') ? 'te-IN' : 'en-US';
+  utter.lang = language === 'hindi' ? 'hi-IN' :
+               language === 'telugu' ? 'te-IN' : 'en-US';
   synth.speak(utter);
 }
 
 function startVoiceInput() {
   const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-  recognition.lang = (language === 'hindi') ? 'hi-IN' :
-                     (language === 'telugu') ? 'te-IN' : 'en-US';
+  recognition.lang = language === 'hindi' ? 'hi-IN' :
+                     language === 'telugu' ? 'te-IN' : 'en-US';
   recognition.start();
+
   recognition.onresult = (event) => {
     const text = event.results[0][0].transcript;
     document.getElementById('queryBox').value = text;
@@ -160,14 +212,14 @@ function startVoiceInput() {
 }
 
 function goBack(pageNum) {
-  if (pageNum === 1) {
-    document.getElementById('page2').style.display = 'none';
-    document.getElementById('page1').style.display = 'block';
-  } else if (pageNum === 2) {
-    document.getElementById('page3').style.display = 'none';
-    document.getElementById('page2').style.display = 'block';
-  }
+  showPage(pageNum);
 }
+
+function showPage(num) {
+  document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+  document.getElementById('page' + num).style.display = 'block';
+}
+
 </script>
 
 </body>
